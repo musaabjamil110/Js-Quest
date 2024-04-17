@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dropdown Menu with Selection Example</title>
+    <style>
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dropdown">
+    <button class="dropbtn">Select an Option</button>
+    <div class="dropdown-content">
+        <a href="#" onclick="selectOption('Option 1')">Option 1</a>
+        <a href="#" onclick="selectOption('Option 2')">Option 2</a>
+        <a href="#" onclick="selectOption('Option 3')">Option 3</a>
+    </div>
+</div>
+
+<script>
+    function selectOption(option) {
+        document.querySelector('.dropbtn').innerText = option;
+        console.log("Selected Option:", option);
+    }
+</script>
+
+</body>
+</html>

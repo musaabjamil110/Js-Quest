@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Change Example</title>
+    <script>
+        function changeImage() {
+            var image = document.getElementById("image");
+            if (image.src.match("image4")) {
+                image.src = "image2.jpg";
+            } else {
+                image.src = "image4.jpg";
+            }
+        }
+    </script>
+</head>
+<body>
+    <img id="image" src="image2.jpg" alt="lul" width="500" height="500">
+    <button onclick="changeImage()" >Change Image</button>
+</body>
+</html>

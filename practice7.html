@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Navbar Toggle Example</title>
+    <style>
+        #navbar {
+            display: none;
+        }
+    </style>
+    <script>
+        function toggleNavbar(){
+            var navbar = document.getElementById("navbar");
+            if(navbar.style.display ==="none"){
+                navbar.style.display = "block";
+            }
+            else {
+                navbar.style.display = "none";
+            }
+        }
+    </script>
+</head>
+<body>
+    <button onclick="toggleNavbar()">Toggle Navbar</button>
+    <nav id="navbar">
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+</body>
+</html>

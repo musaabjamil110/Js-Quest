@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>toggle Visibility</title>
+    <script>
+        function toggleVisibility(){
+            var element = document.getElementById("toggle");
+            if (element.style.display === "none"){
+                element.style.display = "block";
+            }
+            else {
+                element.style.display = "none";
+            }
+        }
+        
+        </script>
+   
+</head>
+<body>
+    <div id="toggle" style="display: none;"> toggle meeeeeeeeeeeeeee</div>
+    <button onclick="toggleVisibility()" > toggleVisibility is here </button>
+   
+
+</body>
+</html>

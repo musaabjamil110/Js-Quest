@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Input Validation Example</title>
+    <script>
+        function validateInput() {
+            var input = document.getElementById("inputField").value;
+            if (input.trim() === "") {
+                alert("Please enter a value!");
+            } else {
+                alert("Input is valid: " + input);
+            }
+        }
+    </script>
+</head>
+<body>
+    <input type="text" id="inputField" placeholder="Enter something">
+    <button onclick="validateInput()">Validate Input</button>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Basic Pop-up Example</title>
+    <style>
+        #popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.37);
+            padding: 20px;
+            border: 1px solid black;
+        }
+    </style>
+    <script>
+        function togglePopup(){
+            var popup = document.getElementById("popup");
+            if(popup.style.display === "none"){
+                popup.style.display = "block";
+            }
+            else {
+                popup.style.display = "none";
+            }
+        }
+       
+    </script>
+</head>
+<body>
+    
+    <button onclick="togglePopup()" > togglePopup</button>
+    <div id="popup">
+        <p>this is a basic popup show</p>
+        <button onclick="togglePopup()" > Close</button>
+    </div>
+</body>
+</html>
