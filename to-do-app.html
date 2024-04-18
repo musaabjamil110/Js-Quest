@@ -29,6 +29,9 @@
 </style>
 </head>
 <body>
+  <input type="text" id="textInput" placeholder="Enter something...">
+  <button id="saveButton">Save</button>
+
   <div class="container">
     <div class="category" id="category1">
       <h3>Category 1</h3>
@@ -43,13 +46,11 @@
       <div id="category3Content"></div>
     </div>
   </div>
-
   <br>
-
-  <input type="text" id="textInput" placeholder="Enter something...">
-  <button id="saveButton">Save</button>
-  
+   
   <script>
+    
+
     const categories = document.querySelectorAll('.category');
     const textInput = document.getElementById('textInput');
     const saveButton = document.getElementById('saveButton');
@@ -66,18 +67,235 @@
       });
     });
 
-    saveButton.addEventListener('click', () => {
-      if (selectedCategory) {
-        const inputValue = textInput.value;
-        const contentDiv = selectedCategory.querySelector('div');
-        contentDiv.textContent = inputValue;
-        textInput.value = '';
-        selectedCategory.classList.remove('active');
-        selectedCategory = null;
-      } else {
-        console.log('Please select a category first.');
-      }
+
+
+    // Load saved data from localStorage on page load
+// Load saved data from localStorage on page load
+window.addEventListener('load', () => {
+  // Retrieve saved data from localStorage
+  const savedData = JSON.parse(localStorage.getItem('savedData'));
+
+  // If there is saved data, populate the categories with it
+  if (savedData) {
+    categories.forEach((category, index) => {
+      const contentDiv = category.querySelector('div');
+      contentDiv.innerHTML = savedData[index];
+      
+      // Check if buttons have already been added to list items
+      const listItems = contentDiv.querySelectorAll('li');
+      listItems.forEach((item, itemIndex) => {
+        if (!item.querySelector('.button-container')) {
+          // Add buttons (remove and edit) only if they haven't been added before
+          const removeButton = document.createElement('button');
+          removeButton.textContent = 'Remove';
+          removeButton.addEventListener('click', () => removeItemFromLocalStorage(index, itemIndex));
+          
+          const editButton = document.createElement('button');
+          editButton.textContent = 'Edit';
+          editButton.addEventListener('click', () => editItem(item, index, itemIndex));
+          
+          const buttonContainer = document.createElement('div');
+          buttonContainer.classList.add('button-container'); // Add a class to identify the container
+          buttonContainer.appendChild(editButton);
+          buttonContainer.appendChild(removeButton);
+          
+          item.appendChild(buttonContainer);
+        }
+      });
     });
+  }
+});
+
+saveButton.addEventListener('click', () => {
+  if (selectedCategory) {
+    const inputValue = textInput.value;
+    const contentDiv = selectedCategory.querySelector('div');
+    
+    // Create a new list element
+    const newItem = document.createElement('li');
+    // Set the text content of the new list element to the input value
+    newItem.textContent = inputValue;
+    
+    // Add buttons (remove and edit) next to the new list item
+    const removeButton = document.createElement('button');
+    removeButton.textContent = 'Remove';
+    removeButton.addEventListener('click', () => removeItemFromLocalStorage(categories.indexOf(selectedCategory), contentDiv.children.length));
+    
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Edit';
+    editButton.addEventListener('click', () => editItem(newItem, categories.indexOf(selectedCategory), contentDiv.children.length));
+    
+    const buttonContainer = document.createElement('div');
+    buttonContainer.appendChild(editButton);
+    buttonContainer.appendChild(removeButton);
+    
+    newItem.appendChild(buttonContainer);
+    
+    // Append the new list element to the contentDiv
+    contentDiv.appendChild(newItem);
+    
+    // Save the updated data to local storage
+    saveDataToLocalStorage();
+
+    // Clear the input field
+    textInput.value = '';
+    
+    // Remove the 'active' class from the selected category
+    selectedCategory.classList.remove('active');
+    // Reset the selected category to null
+    selectedCategory = null;
+  } else {
+    console.log('Please select a category first.');
+  }
+});
+
+function saveDataToLocalStorage() {
+  // Create an array to store the content of each category
+  const data = [];
+
+  // Iterate through each category and store its content
+  categories.forEach(category => {
+    const contentDiv = category.querySelector('div');
+    data.push(contentDiv.innerHTML);
+  });
+
+  // Store the data array in local storage
+  localStorage.setItem('savedData', JSON.stringify(data));
+}
+
+function removeItemFromLocalStorage(categoryIndex, itemIndex) {
+  // Retrieve saved data from localStorage
+  const savedData = JSON.parse(localStorage.getItem('savedData'));
+
+  // If there is saved data and the category index and item index are valid
+  if (savedData && categoryIndex >= 0 && categoryIndex < savedData.length && itemIndex >= 0 && itemIndex < savedData[categoryIndex].split('<li>').length - 1) {
+    // Split the category's content into an array of list items
+    const listItems = savedData[categoryIndex].split('<li>');
+    // Remove the selected item from the array
+    listItems.splice(itemIndex + 1, 1); // Add 1 because the first element is empty after splitting
+    // Join the array back into a string
+    savedData[categoryIndex] = listItems.join('<li>');
+    // Update the local storage with the modified data
+    localStorage.setItem('savedData', JSON.stringify(savedData));
+    // Remove the item from the DOM
+    const category = categories[categoryIndex];
+    const contentDiv = category.querySelector('div');
+    contentDiv.removeChild(contentDiv.children[itemIndex]);
+  }
+}
+
+function editItem(item, categoryIndex, itemIndex) {
+  const newText = prompt('Enter new text:');
+  if (newText !== null) {
+    // Update the text content of the item
+    item.firstChild.textContent = newText;
+    // Update the data in local storage
+    updateItemInLocalStorage(categoryIndex, itemIndex, newText);
+  }
+}
+
+function updateItemInLocalStorage(categoryIndex, itemIndex, newText) {
+  // Retrieve saved data from localStorage
+  const savedData = JSON.parse(localStorage.getItem('savedData'));
+
+  // If there is saved data and the category index and item index are valid
+  if (savedData && categoryIndex >= 0 && categoryIndex < savedData.length && itemIndex >= 0 && itemIndex < savedData[categoryIndex].split('<li>').length - 1) {
+    // Split the category's content into an array of list items
+    const listItems = savedData[categoryIndex].split('<li>');
+    // Update the text content of the selected item
+    listItems[itemIndex + 1] = '<li>' + newText + '</li>';
+    // Join the array back into a string
+    savedData[categoryIndex] = listItems.join('<li>');
+    // Update the local storage with the modified data
+    localStorage.setItem('savedData', JSON.stringify(savedData));
+  }
+}
+
+
+
+// saveButton.addEventListener('click', () => {
+//   if (selectedCategory) {
+//     const inputValue = textInput.value;
+//     const contentDiv = selectedCategory.querySelector('div');
+    
+//     // Create a new list element
+//     const newItem = document.createElement('li');
+//     // Set the text content of the new list element to the input value
+//     newItem.textContent = inputValue;
+//     // Append the new list element to the contentDiv
+//     contentDiv.appendChild(newItem);
+    
+//     // Save the updated data to local storage
+//     saveDataToLocalStorage();
+
+//     // Clear the input field
+//     textInput.value = '';
+    
+//     // Remove the 'active' class from the selected category
+//     selectedCategory.classList.remove('active');
+//     // Reset the selected category to null
+//     selectedCategory = null;
+//   } else {
+//     console.log('Please select a category first.');
+//   }
+// });
+
+// function saveDataToLocalStorage() {
+//   // Create an array to store the content of each category
+//   const data = [];
+
+//   // Iterate through each category and store its content
+//   categories.forEach(category => {
+//     const contentDiv = category.querySelector('div');
+//     data.push(contentDiv.innerHTML);
+//   });
+
+//   // Store the data array in local storage
+//   localStorage.setItem('savedData', JSON.stringify(data));
+// }
+
+
+
+//     saveButton.addEventListener('click', () => {
+//   if (selectedCategory) {
+//     const inputValue = textInput.value;
+//     const contentDiv = selectedCategory.querySelector('div');
+    
+//     // Create a new list element
+//     const newItem = document.createElement('li');
+//     // Set the text content of the new list element to the input value
+//     newItem.textContent = inputValue;
+//     // Append the new list element to the contentDiv
+//     contentDiv.appendChild(newItem);
+    
+//     // Clear the input field
+//     textInput.value = '';
+    
+//     // Remove the 'active' class from the selected category
+//     selectedCategory.classList.remove('active');
+//     // Reset the selected category to null
+//     selectedCategory = null;
+//   } else {
+//     console.log('Please select a category first.');
+//   }
+// });
+
+
+    // saveButton.addEventListener('click', () => {
+    //   if (selectedCategory) {
+    //     const inputValue = textInput.value;
+    //     const contentDiv = selectedCategory.querySelector('div');
+    //     contentDiv.textContent = inputValue;
+    //     textInput.value = '';
+    //     selectedCategory.classList.remove('active');
+    //     selectedCategory = null;
+    //   } else {
+    //     console.log('Please select a category first.');
+    //   }
+    // });
+
+
+
   </script>
 </body>
 </html>

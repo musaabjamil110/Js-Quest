@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Display</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .common{
+            display:  none ;
+        }
+        .button-container {
+            display: flex;
+        }
+
+        .button {
+            padding: 10px 20px;
+            margin: 10px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+
+        .active {
+            background-color: #b91414;
+        }
+
+        #content-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="button-container">
+        <ul class="button-container" >
+            <ul><button class="button" id="btn1"  >Button 1</button></ul>
+            <ul><button class="button" id="btn2">Button 2</button></ul>
+            <ul><button class="button" id="btn3">Button 3</button></ul>
+            <ul><button class="button" id="btn4">Button 4</button></ul>
+        </ul>
+    </div>
+
+    <div class="wrapper">
+        <div class="container">
+            <div id="content-container">
+                <div class="common"  aria-labelledby="btn1" >Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sint alias repellendus eius
+                    eligendi eos illum quidem laboriosam ipsam voluptas! Illo ipsum possimus exercitationem! Dignissimos
+                    error eos magnam consequuntur odit inventore.</div>
+                <div class="common" aria-labelledby="btn2">This is some placeholder content the Contact tab's associated content. Clicking another tab
+                    will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the
+                    content visibility and styling. You can use it with tabs, pills, and any other .nav-powered
+                    navigation.</div>
+                <div class="common" aria-labelledby="btn3">This is some placeholder content the Profile tab's associated content. Clicking another tab
+                    will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the
+                    content visibility and styling. You can use it with tabs, pills, and any other .nav-powered
+                    navigation.</div>
+                <div class="common" aria-labelledby="btn4">This is some placeholder content the Home tab's associated content. clicking another tab
+                    will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the
+                    content visibility and styling. You can use it with tabs, pills, and any other .nav-powered
+                    navigation.</div>
+            </div>
+        </div>
+
+    </div>
+    
+
+    <script>
+        const buttons = document.querySelectorAll('.button');
+        const content = document.querySelectorAll('.common');
+    
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                buttons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to the clicked button
+                button.classList.add('active');
+    
+                // Hide all content
+                content.forEach(item => item.style.display = 'none');
+                
+                // Show the corresponding content
+                const targetContent = document.querySelector(`.common[aria-labelledby="${button.id}"]`);
+                if (targetContent) {
+                    targetContent.style.display = 'block';
+                }
+            });
+        });
+    </script>
+    
+    
+    
+</body>
+
+</html>

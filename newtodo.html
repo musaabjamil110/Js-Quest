@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Button Value Logger</title>
+<style>
+  .container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .category {
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 30%;
+    margin-top: 20px;
+    cursor: pointer;
+  }
+
+  .category.active {
+    background-color: lightblue;
+  }
+
+  button {
+    margin: 5px;
+    padding: 10px;
+  }
+
+  .removeButton,
+  .editButton {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #422b2a;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+    <input type="text" id="textInput" placeholder="Enter something...">
+  <button id="saveButton">Save</button>
+  <button id="removeAllButton">Remove All</button> <!-- New button added -->
+
+  <div class="container">
+    <div class="category" id="category1">
+      <h3>Category 1</h3>
+      <div id="category1Content"></div>
+    </div>
+    <div class="category" id="category2">
+      <h3>Category 2</h3>
+      <div id="category2Content"></div>
+    </div>
+    <div class="category" id="category3">
+      <h3>Category 3</h3>
+      <div id="category3Content"></div>
+    </div>
+  </div>
+
+  <br>
+
+  <script>
+    const categories = document.querySelectorAll('.category');
+    const textInput = document.getElementById('textInput');
+    const saveButton = document.getElementById('saveButton');
+    const removeAllButton = document.getElementById('removeAllButton'); // New button added
+
+    let selectedCategory = null;
+
+    categories.forEach(category => {
+      category.addEventListener('click', () => {
+        categories.forEach(cat => {
+          cat.classList.remove('active');
+        });
+        category.classList.add('active');
+        selectedCategory = category;
+      });
+    });
+
+    saveButton.addEventListener('click', () => {
+      if (selectedCategory) {
+        const inputValue = textInput.value;
+        const contentDiv = selectedCategory.querySelector('div');
+        const listItem = document.createElement('div');
+        const textSpan = document.createElement('span');
+        textSpan.textContent = inputValue;
+        listItem.appendChild(textSpan);
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Remove';
+        removeButton.className = 'removeButton';
+        removeButton.addEventListener('click', () => {
+          listItem.remove();
+          updateLocalStorage();
+        });
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        editButton.className = 'editButton';
+        editButton.addEventListener('click', () => {
+          const newText = prompt('Enter new text:', textSpan.textContent);
+          if (newText !== null && newText.trim() !== '') {
+            textSpan.textContent = newText;
+            updateLocalStorage();
+          }
+        });
+        listItem.appendChild(removeButton);
+        listItem.appendChild(editButton);
+        contentDiv.appendChild(listItem);
+        textInput.value = '';
+        selectedCategory.classList.remove('active');
+        selectedCategory = null;
+        updateLocalStorage();
+      } else {
+        alert('Please select a category first.');
+      }
+    });
+
+    removeAllButton.addEventListener('click', () => { // Event listener for "Remove All" button
+      if (confirm('Are you sure you want to remove all items?')) {
+        localStorage.clear(); // Clear local storage
+        location.reload(); // Reload the page to reflect the changes
+      }
+    });
+
+    function updateLocalStorage() {
+      categories.forEach(category => {
+        const categoryId = category.id;
+        const contentDiv = category.querySelector('div');
+        const items = [];
+        contentDiv.querySelectorAll('span').forEach(item => {
+          items.push(item.textContent);
+        });
+        localStorage.setItem(categoryId, JSON.stringify(items));
+      });
+    }
+
+    function loadFromLocalStorage() {
+      categories.forEach(category => {
+        const categoryId = category.id;
+        const contentDiv = category.querySelector('div');
+        const items = JSON.parse(localStorage.getItem(categoryId)) || [];
+        items.forEach(item => {
+          const listItem = document.createElement('div');
+          const textSpan = document.createElement('span');
+          textSpan.textContent = item;
+          listItem.appendChild(textSpan);
+          const removeButton = document.createElement('button');
+          removeButton.textContent = 'Remove';
+          removeButton.className = 'removeButton';
+          removeButton.addEventListener('click', () => {
+            listItem.remove();
+            updateLocalStorage();
+          });
+          const editButton = document.createElement('button');
+          editButton.textContent = 'Edit';
+          editButton.className = 'editButton';
+          editButton.addEventListener('click', () => {
+            const newText = prompt('Enter new text:', textSpan.textContent);
+            if (newText !== null && newText.trim() !== '') {
+              textSpan.textContent = newText;
+              updateLocalStorage();
+            }
+          });
+          listItem.appendChild(removeButton);
+          listItem.appendChild(editButton);
+          contentDiv.appendChild(listItem);
+        });
+      });
+    }
+
+    loadFromLocalStorage();
+
+    
+  </script>
+</body>
+</html>
