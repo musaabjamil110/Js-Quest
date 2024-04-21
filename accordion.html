@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accordion Display</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body{
+            margin: 3vh;
+            padding: 3vh;
+            overflow: hidden;
+            background-color: rgb(46, 43, 43);
+        }
+        .wrapper{
+            
+            background-color: beige;
+            padding: 10px;
+            
+        }
+        .question{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: aqua;
+            margin: 10px;
+
+            
+        }
+        button{
+            background-color: cadetblue;  
+            cursor: pointer;      
+        }
+        .answer{
+            display: none;
+        }
+        .active{
+            display: block;
+        }
+       
+    </style>
+</head>
+
+<body>
+
+    <div class="wrapper">
+        
+        <div class="accordion">
+            <div class="question">
+                <h3>What do you want ?</h3>
+                <button class="btn" >expand</button>
+            </div>
+            <div class="answer ">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus et eveniet ea expedita, illo deleniti nostrum enim possimus rem, quam assumenda commodi blanditiis vero eum. Officia totam animi asperiores porro.</p>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="question">
+                <h3>What do you want ?</h3>
+                <button class="btn" >expand</button>
+            </div>
+            <div class="answer ">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus et eveniet ea expedita, illo deleniti nostrum enim possimus rem, quam assumenda commodi blanditiis vero eum. Officia totam animi asperiores porro.</p>
+            </div>
+        </div>
+        <div class="accordion">
+            <div class="question">
+                <h3>What do you want ?</h3>
+                <button class="btn" >expand</button>
+            </div>
+            <div class="answer  ">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus et eveniet ea expedita, illo deleniti nostrum enim possimus rem, quam assumenda commodi blanditiis vero eum. Officia totam animi asperiores porro.</p>
+            </div>
+        </div><div class="accordion">
+            <div class="question">
+                <h3>What do you want ?</h3>
+                <button class="btn" >expand</button>
+            </div>
+            <div class="answer">
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus et eveniet ea expedita, illo deleniti nostrum enim possimus rem, quam assumenda commodi blanditiis vero eum. Officia totam animi asperiores porro.</p>
+            </div>
+        </div>
+
+        
+    </div>
+
+
+    
+   
+    <script>
+    
+    const accordions = document.querySelectorAll('.accordion');
+
+    accordions.forEach(accordion => {
+        const button = accordion.querySelector('.btn');
+        const answer = accordion.querySelector('.answer');
+
+
+        button.addEventListener('click', () => {
+            // Toggle the 'active' class on the answer
+            if (answer.classList.contains('active')) {
+                answer.classList.remove('active');
+            } else {
+
+                accordions.forEach(acc => {
+                    let accAns = acc.querySelector('.answer');
+                    if( accAns.classList.contains('active')){
+                        accAns.classList.remove('active')
+                    }
+                    
+                });
+                answer.classList.add('active');
+            }
+            
+        });
+    });
+
+
+
+
+        
+        
+    </script>
+    
+    
+</body>
+
+</html>
